@@ -2,19 +2,20 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Telegram Web App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
-            background-color: #f0f2f5;
+            background-color: var(--tg-theme-bg-color, #f0f2f5);
+            color: var(--tg-theme-text-color, #000);
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background: white;
+            background: var(--tg-theme-secondary-bg-color, #fff);
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -23,22 +24,22 @@
             width: 100%;
             padding: 12px;
             margin: 10px 0;
-            border: 1px solid #ddd;
+            border: 1px solid var(--tg-theme-hint-color, #ddd);
             border-radius: 8px;
             box-sizing: border-box;
         }
         button {
-            background-color: #31a8f7;
-            color: white;
+            background-color: var(--tg-theme-button-color, #31a8f7);
+            color: var(--tg-theme-button-text-color, #fff);
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #1e87d0;
+            background-color: var(--tg-theme-button-color, #1e87d0);
         }
         h1 {
-            color: #333;
+            color: var(--tg-theme-text-color, #333);
             text-align: center;
         }
     </style>
@@ -53,7 +54,7 @@
     <script>
         // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
-        
+
         // Показываем основную кнопку интерфейса
         tg.MainButton.show();
         tg.MainButton.setParams({
@@ -61,12 +62,22 @@
             color: "#31a8f7"
         });
 
+        // Обработчик клика по MainButton
+        tg.MainButton.onClick(() => {
+            sendDataToBot();
+        });
+
         // Функция для отправки данных в бота
         function sendDataToBot() {
             const userInput = document.getElementById('userInput').value;
-            
-            if (userInput.trim() === '') {
-                alert('Пожалуйста, введите текст!');
+
+            // Валидация данных
+            if (userInput.trim().length < 3) {
+                tg.showPopup({
+                    title: 'Ошибка',
+                    message: 'Минимум 3 символа!',
+                    buttons: [{id: 'close', type: 'close'}]
+                });
                 return;
             }
 
@@ -76,6 +87,13 @@
                 text: userInput,
                 timestamp: new Date().getTime()
             }));
+
+            // Показываем подтверждение
+            tg.showPopup({
+                title: 'Успешно!',
+                message: 'Данные отправлены',
+                buttons: [{id: 'close', type: 'close'}]
+            });
 
             // Закрытие веб-приложения
             tg.close();
