@@ -55,22 +55,17 @@
         // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
 
-        // Проверка версии Telegram Web App
-        console.log("Версия Telegram Web App:", tg.version);
-
         // Показываем основную кнопку интерфейса
-        if (tg.MainButton && tg.MainButton.show) {
-            tg.MainButton.show();
-            tg.MainButton.setParams({
-                text: "Готово",
-                color: "#31a8f7"
-            });
+        tg.MainButton.show();
+        tg.MainButton.setParams({
+            text: "Готово",
+            color: "#31a8f7"
+        });
 
-            // Обработчик клика по MainButton
-            tg.MainButton.onClick(() => {
-                sendDataToBot();
-            });
-        }
+        // Обработчик клика по MainButton
+        tg.MainButton.onClick(() => {
+            sendDataToBot();
+        });
 
         // Функция для отправки данных в бота
         function sendDataToBot() {
@@ -78,11 +73,7 @@
 
             // Валидация данных
             if (userInput.trim().length < 3) {
-                if (tg.showAlert) {
-                    tg.showAlert('Минимум 3 символа!'); // Используем showAlert, если он доступен
-                } else {
-                    alert('Минимум 3 символа!'); // Fallback на стандартный alert
-                }
+                tg.showAlert('Минимум 3 символа!'); // Используем showAlert вместо showPopup
                 return;
             }
 
@@ -90,31 +81,21 @@
             console.log("Отправка данных:", userInput);
 
             // Отправка данных в бот
-            if (tg.sendData) {
-                tg.sendData(JSON.stringify({
-                    action: 'user_message',
-                    text: userInput,
-                    timestamp: new Date().getTime()
-                }));
-            }
+            tg.sendData(JSON.stringify({
+                action: 'user_message',
+                text: userInput,
+                timestamp: new Date().getTime()
+            }));
 
             // Показываем подтверждение
-            if (tg.showAlert) {
-                tg.showAlert('Данные отправлены!'); // Используем showAlert, если он доступен
-            } else {
-                alert('Данные отправлены!'); // Fallback на стандартный alert
-            }
+            tg.showAlert('Данные отправлены!'); // Используем showAlert вместо showPopup
 
             // Закрытие веб-приложения
-            if (tg.close) {
-                tg.close();
-            }
+            tg.close();
         }
 
         // Инициализация при загрузке
-        if (tg.ready) {
-            tg.ready();
-        }
+        tg.ready();
     </script>
 </body>
 </html>
