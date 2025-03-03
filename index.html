@@ -3,11 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Shop</title>
+    <style>
+        /* Устанавливаем фон для всей страницы */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('https://img.freepik.com/free-photo/watercolor-paper-texture_1194-6434.jpg?t=st=1740997869~exp=1741001469~hmac=f0d71762605f900ce0030ab25765ecad6a76c6a3b6fd0c4b3117fc67bd86cbf6&w=900');            background-size: cover; /* Растягиваем фон на весь экран */
+            background-repeat: no-repeat; /* Убираем повторение фона */
+            background-attachment: fixed; /* Фиксируем фон */
+            color: white; /* Белый текст для контраста */
+            text-align: center;
+            height: 100vh; /* Занимаем всю высоту экрана */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #main {
+            background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон для контента */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        #buy {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #ff6347; /* Цвет кнопки */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #buy:hover {
+            background-color: #ff4500; /* Цвет кнопки при наведении */
+        }
+    </style>
 </head>
 <body>
     <div id="main">
-        <h1>Онлайн магазин</h1>
-        <button id="buy">Купить</button>
+        <h1>Гарантируем удовольствие от каждого кусочка!</h1>
+        <button id="buy">Каталог</button>
     </div>
 </body>
 </html>
