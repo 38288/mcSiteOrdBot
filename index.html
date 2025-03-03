@@ -3,81 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop</title>
+    <title>Telegram Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Устанавливаем фон для всей страницы */
         body {
-            margin: 0;
-            padding: 0;
             font-family: Arial, sans-serif;
-            background-image: url('https://img.freepik.com/free-photo/watercolor-paper-texture_1194-6434.jpg?t=st=1740997869~exp=1741001469~hmac=f0d71762605f900ce0030ab25765ecad6a76c6a3b6fd0c4b3117fc67bd86cbf6&w=900'); /* Замените на URL вашей текстуры */
-            background-size: cover; /* Растягиваем фон на весь экран */
-            background-repeat: no-repeat; /* Убираем повторение фона */
-            background-attachment: fixed; /* Фиксируем фон */
-            color: white; /* Белый текст для контраста */
-            text-align: center;
-            height: 100vh; /* Занимаем всю высоту экрана */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Контейнер для текста и кнопки */
-        #main {
-            /*background-color: rgba(0, 0, 0, 0.5);  Полупрозрачный черный фон */
-            backdrop-filter: blur(10px); /* Размытие фона */
             padding: 20px;
-            border-radius: 10px;
-            max-width: 90%; /* Ограничиваем ширину контейнера */
-            width: 100%; /* Занимаем всю доступную ширину */
+            background-color: #f0f2f5;
         }
-
-        h1 {
-            font-size: 2em; /* Уменьшаем размер заголовка для мобильных */
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Тень для текста */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        #buy {
-            padding: 10px 20px;
-            font-size: 1em; /* Уменьшаем размер кнопки для мобильных */
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #31a8f7;
             color: white;
-            background-color: #ff6347; /* Цвет кнопки */
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Тень для кнопки */
-            width: 100%; /* Кнопка занимает всю ширину контейнера */
-            max-width: 200px; /* Ограничиваем максимальную ширину */
+            transition: background-color 0.3s;
         }
-
-        #buy:hover {
-            background-color: #ff4500; /* Цвет кнопки при наведении */
+        button:hover {
+            background-color: #1e87d0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div id="main">
-        <h1>Гарантируем удовольствие от каждого кусочка!</h1>
-        <button id="buy">Каталог</button>
+    <div class="container">
+        <h1>📝 Моё Web-приложение</h1>
+        <input type="text" id="userInput" placeholder="Введите ваш текст...">
+        <button onclick="sendDataToBot()">🚀 Отправить в бот</button>
     </div>
 
     <script>
-        // Взаимодействие с Telegram Web App
+        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
-
-        // Инициализация Web App
-        tg.ready(); // Сообщаем Telegram, что Web App готов к использованию
-
-        // Обработчик нажатия на кнопку
-        document.getElementById('buy').addEventListener('click', () => {
-            // Пример отправки данных обратно в бота
-            tg.sendData(JSON.stringify({ action: 'open_catalog' }));
+        
+        // Показываем основную кнопку интерфейса
+        tg.MainButton.show();
+        tg.MainButton.setParams({
+            text: "Готово",
+            color: "#31a8f7"
         });
 
-        // Закрытие Web App (опционально)
-        // tg.close();
+        // Функция для отправки данных в бота
+        function sendDataToBot() {
+            const userInput = document.getElementById('userInput').value;
+            
+            if (userInput.trim() === '') {
+                alert('Пожалуйста, введите текст!');
+                return;
+            }
+
+            // Отправка данных в бот
+            tg.sendData(JSON.stringify({
+                action: 'user_message',
+                text: userInput,
+                timestamp: new Date().getTime()
+            }));
+
+            // Закрытие веб-приложения
+            tg.close();
+        }
+
+        // Инициализация при загрузке
+        tg.ready();
     </script>
 </body>
 </html>
