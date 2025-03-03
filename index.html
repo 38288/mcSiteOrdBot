@@ -81,6 +81,9 @@
                 return;
             }
 
+            // Логируем отправляемые данные
+            console.log("Отправка данных:", userInput);
+
             // Отправка данных в бот
             tg.sendData(JSON.stringify({
                 action: 'user_message',
