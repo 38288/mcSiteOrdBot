@@ -73,11 +73,7 @@
 
             // Валидация данных
             if (userInput.trim().length < 3) {
-                tg.showPopup({
-                    title: 'Ошибка',
-                    message: 'Минимум 3 символа!',
-                    buttons: [{id: 'close', type: 'close'}]
-                });
+                tg.showAlert('Минимум 3 символа!'); // Используем showAlert вместо showPopup
                 return;
             }
 
@@ -92,11 +88,7 @@
             }));
 
             // Показываем подтверждение
-            tg.showPopup({
-                title: 'Успешно!',
-                message: 'Данные отправлены',
-                buttons: [{id: 'close', type: 'close'}]
-            });
+            tg.showAlert('Данные отправлены!'); // Используем showAlert вместо showPopup
 
             // Закрытие веб-приложения
             tg.close();
