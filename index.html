@@ -2,130 +2,101 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Telegram Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Устанавливаем фон для всей страницы */
         body {
-            margin: 0;
-            padding: 0;
             font-family: Arial, sans-serif;
-            background-image: url('https://img.freepik.com/free-photo/watercolor-paper-texture_1194-6434.jpg?t=st=1740997869~exp=1741001469~hmac=f0d71762605f900ce0030ab25765ecad6a76c6a3b6fd0c4b3117fc67bd86cbf6&w=900'); /* Замените на URL вашей текстуры */
-            background-size: cover; /* Растягиваем фон на весь экран */
-            background-repeat: no-repeat; /* Убираем повторение фона */
-            background-attachment: fixed; /* Фиксируем фон */
-            color: white; /* Белый текст для контраста */
-            text-align: center;
-            height: 100vh; /* Занимаем всю высоту экрана */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Контейнер для текста и кнопки */
-        #main {
             padding: 20px;
-            border-radius: 10px;
-            max-width: 90%; /* Ограничиваем ширину контейнера */
-            width: 100%; /* Занимаем всю доступную ширину */
-            margin-top: 20px; /* Поднимаем контейнер выше */
+            background-color: var(--tg-theme-bg-color, #f0f2f5);
+            color: var(--tg-theme-text-color, #000);
         }
-
-        h1 {
-            font-size: 2em; /* Уменьшаем размер заголовка для мобильных */
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Тень для текста */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--tg-theme-secondary-bg-color, #fff);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        .category-button {
-            padding: 10px 20px;
-            font-size: 1em; /* Уменьшаем размер кнопки для мобильных */
-            color: white;
-            background-color: #ff6347; /* Цвет кнопки */
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Тень для кнопки */
-            width: 100%; /* Кнопка занимает всю ширину контейнера */
-            max-width: 200px; /* Ограничиваем максимальную ширину */
-            margin: 10px 0; /* Отступ между кнопками */
-        }
-
-        .category-button:hover {
-            background-color: #ff4500; /* Цвет кнопки при наведении */
-        }
-
-        #products {
-            margin-top: 20px;
-        }
-
-        .product {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 10px;
+        input, button {
+            width: 100%;
+            padding: 12px;
             margin: 10px 0;
-            border-radius: 5px;
-            color: #333;
+            border: 1px solid var(--tg-theme-hint-color, #ddd);
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--tg-theme-button-color, #31a8f7);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: var(--tg-theme-button-color, #1e87d0);
+        }
+        h1 {
+            color: var(--tg-theme-text-color, #333);
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div id="main">
-        <h1>Гарантируем удовольствие от каждого кусочка!</h1>
-        
-        <!-- Кнопки выбора категорий -->
-        <button class="category-button" data-category="1">Категория 1</button>
-        <button class="category-button" data-category="2">Категория 2</button>
-        <button class="category-button" data-category="3">Категория 3</button>
-
-        <!-- Контейнер для отображения товаров -->
-        <div id="products"></div>
+    <div class="container">
+        <h1>📝 Моё Web-приложение</h1>
+        <input type="text" id="userInput" placeholder="Введите ваш текст...">
+        <button onclick="sendDataToBot()">🚀 Отправить в бот</button>
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <script>
-        // Взаимодействие с Telegram Web App
+        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
 
-        // Инициализация Web App
-        tg.ready(); // Сообщаем Telegram, что Web App готов к использованию
+        // Показываем основную кнопку интерфейса
+        tg.MainButton.show();
+        tg.MainButton.setParams({
+            text: "Готово",
+            color: "#31a8f7"
+        });
 
-        // Функция для обработки данных от бота
-        function handleBotData(data) {
-            const productsContainer = document.getElementById('products');
-            productsContainer.innerHTML = '';
+        // Обработчик клика по MainButton
+        tg.MainButton.onClick(() => {
+            sendDataToBot();
+        });
 
-            data.forEach(product => {
-                const productElement = document.createElement('div');
-                productElement.className = 'product';
-                productElement.textContent = product.name; // Предполагаем, что у товара есть поле "name"
-                productsContainer.appendChild(productElement);
-            });
+        // Функция для отправки данных в бота
+        function sendDataToBot() {
+            const userInput = document.getElementById('userInput').value;
+
+            // Валидация данных
+            if (userInput.trim().length < 3) {
+                tg.showAlert('Минимум 3 символа!'); // Используем showAlert вместо showPopup
+                return;
+            }
+
+            // Логируем отправляемые данные
+            console.log("Отправка данных:", userInput);
+
+            // Отправка данных в бот
+            tg.sendData(JSON.stringify({
+                action: 'user_message',
+                text: userInput,
+                timestamp: new Date().getTime()
+            }));
+
+            // Показываем подтверждение
+            tg.showAlert('Данные отправлены!'); // Используем showAlert вместо showPopup
+
+            // Закрытие веб-приложения
+            tg.close();
         }
 
-        // Обработчики нажатия на кнопки категорий
-        document.querySelectorAll('.category-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const categoryId = button.getAttribute('data-category');
-
-                // Отправляем данные в бота
-                tg.sendData(JSON.stringify({ action: 'get_products', category: categoryId }));
-            });
-        });
-
-        // Обработчик получения данных от бота
-        Telegram.WebApp.onEvent('mainButtonClicked', () => {
-            // Пример обработки данных от бота
-            const botData = [
-                { name: 'Товар 1' },
-                { name: 'Товар 2' },
-                { name: 'Товар 3' }
-            ];
-            handleBotData(botData);
-        });
-
-        // Закрытие Web App (опционально)
-        // tg.close();
+        // Инициализация при загрузке
+        tg.ready();
     </script>
 </body>
 </html>
