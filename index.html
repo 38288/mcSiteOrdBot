@@ -40,12 +40,15 @@
             const quantity = document.getElementById(`quantity-${dish}`).value;
             const orderData = { dish, quantity: parseInt(quantity) };
 
-            // Отправляем данные в Telegram
+            console.log("Данные заказа:", orderData);
+
             if (window.Telegram && Telegram.WebApp) {
+                console.log("Telegram.WebApp инициализирован.");
                 Telegram.WebApp.sendData(JSON.stringify(orderData));
                 Telegram.WebApp.close();
             } else {
-                alert("Ошибка: Telegram WebApp не инициализирован.");
+                console.error("Ошибка: Telegram.WebApp не инициализирован.");
+                alert("Ошибка: Telegram.WebApp не инициализирован.");
             }
         }
     </script>
