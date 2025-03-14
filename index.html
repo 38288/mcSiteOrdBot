@@ -2,101 +2,48 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Telegram Web App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ еды</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
-            background-color: var(--tg-theme-bg-color, #f0f2f5);
-            color: var(--tg-theme-text-color, #000);
         }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: var(--tg-theme-secondary-bg-color, #fff);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        input, button {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid var(--tg-theme-hint-color, #ddd);
-            border-radius: 8px;
-            box-sizing: border-box;
+        .dish {
+            margin-bottom: 10px;
         }
         button {
-            background-color: var(--tg-theme-button-color, #31a8f7);
-            color: var(--tg-theme-button-text-color, #fff);
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: var(--tg-theme-button-color, #1e87d0);
-        }
-        h1 {
-            color: var(--tg-theme-text-color, #333);
-            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📝 Моё Web-приложение</h1>
-        <input type="text" id="userInput" placeholder="Введите ваш текст...">
-        <button onclick="sendDataToBot()">🚀 Отправить в бот</button>
+    <h1>Меню</h1>
+    <div id="menu">
+        <div class="dish">
+            <h3>Пицца - 10$</h3>
+            <input type="number" id="quantity-pizza" min="1" value="1">
+            <button onclick="order('pizza')">Заказать</button>
+        </div>
+        <div class="dish">
+            <h3>Бургер - 8$</h3>
+            <input type="number" id="quantity-burger" min="1" value="1">
+            <button onclick="order('burger')">Заказать</button>
+        </div>
     </div>
-
-    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <script>
-        // Инициализация Telegram Web App
-        const tg = window.Telegram.WebApp;
+        function order(dish) {
+            const quantity = document.getElementById(`quantity-${dish}`).value;
+            const orderData = { dish, quantity: parseInt(quantity) };
 
-        // Показываем основную кнопку интерфейса
-        tg.MainButton.show();
-        tg.MainButton.setParams({
-            text: "Готово",
-            color: "#31a8f7"
-        });
-
-        // Обработчик клика по MainButton
-        tg.MainButton.onClick(() => {
-            sendDataToBot();
-        });
-
-        // Функция для отправки данных в бота
-        function sendDataToBot() {
-            const userInput = document.getElementById('userInput').value;
-
-            // Валидация данных
-            if (userInput.trim().length < 3) {
-                tg.showAlert('Минимум 3 символа!'); // Используем showAlert вместо showPopup
-                return;
-            }
-
-            // Логируем отправляемые данные
-            console.log("Отправка данных:", userInput);
-
-            // Отправка данных в бот
-            tg.sendData(JSON.stringify({
-                action: 'user_message',
-                text: userInput,
-                timestamp: new Date().getTime()
-            }));
-
-            // Показываем подтверждение
-            tg.showAlert('Данные отправлены!'); // Используем showAlert вместо showPopup
-
-            // Закрытие веб-приложения
-            tg.close();
+            // Отправляем данные в Telegram
+            Telegram.WebApp.sendData(JSON.stringify(orderData));
+            Telegram.WebApp.close();
         }
-
-        // Инициализация при загрузке
-        tg.ready();
     </script>
 </body>
 </html>
