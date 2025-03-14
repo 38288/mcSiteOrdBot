@@ -41,8 +41,12 @@
             const orderData = { dish, quantity: parseInt(quantity) };
 
             // Отправляем данные в Telegram
-            Telegram.WebApp.sendData(JSON.stringify(orderData));
-            Telegram.WebApp.close();
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.sendData(JSON.stringify(orderData));
+                Telegram.WebApp.close();
+            } else {
+                alert("Ошибка: Telegram WebApp не инициализирован.");
+            }
         }
     </script>
 </body>
